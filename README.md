@@ -1,2 +1,2 @@
 # Keen-Ninja
-This is my first game with | unity |
+This is my first game with unity
