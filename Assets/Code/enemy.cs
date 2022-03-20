@@ -29,7 +29,7 @@ public class enemy : MonoBehaviour
     {
         Debug.Log("Enemy Died!");
 
-        anima.SetTrigger("Dead");
+        anima.SetTrigger("dead");
 
         GetComponent <Collider2D>().enabled = true;
         //GetComponent<CircleCollider2D>().enabled = false;
