@@ -4,50 +4,25 @@ using UnityEngine;
 
 public class Parallax : MonoBehaviour
 {
-    GameObject cam;
-    [Range(0, 1)]
-    public float speed;
-    float startPosX, startPosY, tempX, distX, distY, length;
+    public GameObject cam;
+    private float lenght, startpos;
+    public float parallaxEffect;
 
-    public bool auto, createCopys, includeY;
-
-    private void Awake()
+    private void Start()
     {
-        cam = FindObjectOfType<Camera>().gameObject;
-        startPosX = cam.transform.position.x;
-        startPosY = cam.transform.position.y;
-        length = GetComponent<SpriteRenderer>().bounds.size.x;
+        startpos = transform.position.x;
+        lenght = GetComponent<SpriteRenderer>().bounds.size.x;
     }
 
     private void FixedUpdate()
     {
-        if (auto)
-        {
-            transform.position = new Vector3(speed, 0, 0);
+        float temp = (cam.transform.position.x * (1 - parallaxEffect));
+        float distance = (cam.transform.position.x * parallaxEffect);
 
-            if (createCopys)
-            {
-                if (startPosX > length || startPosX < -length) transform.position = new Vector3(0, transform.position.y, transform.position.z);
-            }
-        }
-        else
-        {
-            tempX = (cam.transform.position.x * (1 - speed));
-            distX = (cam.transform.position.x * (speed));
 
-            if (includeY)
-            {
-                distY = (cam.transform.position.y * speed);
-            }
+        transform.position = new Vector3(startpos + distance, transform.position.y, transform.position.z);
 
-            transform.position = new Vector3(startPosX + distX, startPosY + distY, transform.position.z);
-
-            if (createCopys)
-            {
-                if (tempX > startPosX + length) startPosX += length;
-                else if (tempX < startPosX - length) startPosX -= length;
-            }
-        }
-
+        if (temp > startpos + lenght) startpos += lenght;
+        else if (temp < startpos - lenght) startpos -= lenght;
     }
 }
