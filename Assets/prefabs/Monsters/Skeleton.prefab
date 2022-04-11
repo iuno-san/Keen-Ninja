@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 7336831732806739804}
   - component: {fileID: 7336831732806739802}
   - component: {fileID: 7336831732806739803}
-  - component: {fileID: 7336831732806739800}
-  - component: {fileID: 8383589203133682941}
+  - component: {fileID: 4704810328512061777}
+  - component: {fileID: 3505616718923250928}
+  - component: {fileID: 5059192455145849030}
   m_Layer: 9
   m_Name: Skeleton
   m_TagString: Enemy
@@ -134,7 +135,28 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &7336831732806739800
+--- !u!114 &4704810328512061777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7336831732806739798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b251a4beacbdd648b0c9bec9e9d34d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackCooldown: 1
+  range: 1.24
+  damage: 2
+  AttackSound: {fileID: 8300000, guid: 25c91cab5aa923446af925875cca2cb7, type: 3}
+  colliderDistance: 0.83
+  boxCollider: {fileID: 7336831732806739802}
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+--- !u!114 &3505616718923250928
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -146,9 +168,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbea5e9c20d4496479510c8c33f6e920, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anima: {fileID: 7336831732806739803}
+  anim: {fileID: 7336831732806739803}
   maxHealth: 100
---- !u!114 &8383589203133682941
+--- !u!114 &5059192455145849030
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -157,9 +179,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7336831732806739798}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 683ca27ca7ee6d645b211d1dba22695e, type: 3}
+  m_Script: {fileID: 11500000, guid: dc5a6353eae2b1a448ed2cb28efb751b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementDistance: 1
-  speed: 1
   damage: 1

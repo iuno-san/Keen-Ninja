@@ -5,15 +5,21 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     [Header ("Health")]
+
     [SerializeField] public float startingHealth;
+    public bool IsDead { get { return currentHealth == 0; } }
     public float currentHealth { get; private set; }  //jest publiczne ale nie mozna zmieniac wartosci
     private Animator anim;
-    public bool isDead { get { return currentHealth == 0; } }
 
     [Header("iFrames")]
+
     [SerializeField] private float iFramesDuration;
     [SerializeField] private int numberOfFlashes;
     private SpriteRenderer spriteRend;
+
+    [Header("Death && hurt Sound")]
+    [SerializeField] private AudioClip DeathSound;
+    [SerializeField] private AudioClip HurtSound;
 
     private void Awake()
     {
@@ -29,13 +35,16 @@ public class Health : MonoBehaviour
         {
             //player hurt
             anim.SetTrigger("hurt");
+           /// SoundManager.Instance.PlaySound(HurtSound);
+
             //ifFrames
             StartCoroutine(Invunerabillity());
         }
         else
         {
             //player dead
-            anim.SetTrigger("die");
+            anim.SetTrigger("dead");
+            SoundManager.Instance.PlaySound(DeathSound);
         }
     }
 
@@ -59,5 +68,9 @@ public class Health : MonoBehaviour
 
     }
 
+    private void Deactivate()
+    {
+      gameObject.SetActive(false);
+    }
 
 }

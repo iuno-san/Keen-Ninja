@@ -15,7 +15,8 @@ using UnityEngine;
 
 public class PlayerAttack2 : MonoBehaviour
 {
-    [SerializeField] private float attackCooldown;
+   [SerializeField] private float attackCooldown;
+   [SerializeField] private AudioClip AttackSound;
     private Animator anim2;
     private Ninja playerMovement;
     private float cooldownTimer = Mathf.Infinity;
@@ -42,6 +43,8 @@ public class PlayerAttack2 : MonoBehaviour
 
     private void Attack() // atack, wykrywanie wrogów i obrazenia
     {
+        SoundManager.Instance.PlaySound(AttackSound);
+
         //animacja ataku
         anim2.SetTrigger("attack2");
         cooldownTimer = 0;

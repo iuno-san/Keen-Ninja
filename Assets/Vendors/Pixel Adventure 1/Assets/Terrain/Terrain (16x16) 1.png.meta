@@ -247,10 +247,10 @@ TextureImporter:
       name: Terrain (16x16) 1_6
       rect:
         serializedVersion: 2
-        x: 40
-        y: 73
-        width: 7
-        height: 30
+        x: 0
+        y: 64
+        width: 80
+        height: 48
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -268,13 +268,13 @@ TextureImporter:
       name: Terrain (16x16) 1_7
       rect:
         serializedVersion: 2
-        x: 98
+        x: 96
         y: 64
-        width: 44
-        height: 46
+        width: 47
+        height: 47
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 2, y: 1, z: 1, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -331,12 +331,12 @@ TextureImporter:
       name: Terrain (16x16) 1_10
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 80
-        height: 48
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 55
+        y: 22
+        width: 18
+        height: 20
+      alignment: 9
+      pivot: {x: 0.51217335, y: 0.5070467}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

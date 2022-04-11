@@ -18,16 +18,36 @@ using UnityEngine;
 public class Ninja : MonoBehaviour
 {  //variables - zmienne && wartoœci
 
-    [SerializeField] private float speed;
+    [Header("Movment Parameters")]
     [SerializeField] private float jumpPower;
+    [SerializeField] private float speed;
+
+    [Header("Layers")]
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask wallLayer;
+
+    [Header("Coyote Time")]
+    [SerializeField] private float coyoteTime; // ile czasu gracz mo¿e wisieæ w powietrzu przed skokiem
+    private float coyoteCounter; // ile czasu up³ynê³o od momentu, gdy gracz uciek³ z krawêdzi
+
+    [Header("Multiple Jumps")]
+    [SerializeField] private int extraJumps;
+    private int jumpCounter;
+
+    [Header("Wall Jumping")]
+    [SerializeField] private float wallJumpX; //si³a skoku na œcianê poziom¹
+    [SerializeField] private float wallJumpY; //si³a pionowego skoku przez œcianê
+
+    [Header("Sounds")]
+    [SerializeField] private AudioClip JumpSound;
+   
     private Rigidbody2D body;
     private Animator anim;
     private BoxCollider2D boxCollider;
     private Health healthComponent;
     private float wallJumpCooldown;
     private float horizontalInput;
+
 
     // Start is called before the first frame update
      void Start()
@@ -56,12 +76,12 @@ public class Ninja : MonoBehaviour
         anim.SetBool("run", MathHelper.IsNearlyEqual(body.velocity.x, 0) == false);
         anim.SetBool("grounded", isGrounded());
 
-        print(onWall()+", "+isGrounded());
+        //print(onWall()+", "+isGrounded());
 
         //skakanie na scianie - wall jump logic
         if (wallJumpCooldown > 0.2f)
         {
-            horizontalInput = (healthComponent.isDead ? 0 : Input.GetAxis("Horizontal"));
+            horizontalInput = (healthComponent.IsDead ? 0 : Input.GetAxis("Horizontal"));
 
             body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
 
@@ -73,31 +93,66 @@ public class Ninja : MonoBehaviour
             else
                 body.gravityScale = 8;
 
-            if(!healthComponent.isDead && Input.GetKey(KeyCode.Space))
+            if (!healthComponent.IsDead && Input.GetKeyDown(KeyCode.Space))
+            {
                 Jump();
+            }
         }
         else 
             wallJumpCooldown += Time.deltaTime;
-    }
-    //metoda na skakanie - jump method
-   private void Jump()
-    {
-        if (isGrounded())
+
+        // regulowana wysokosc skoku
+
+        if (Input.GetKeyUp(KeyCode.Space) && body.velocity.y > 0)
+            body.velocity = new Vector2(body.velocity.x, body.velocity.y /2);
+
+        if(onWall())
         {
-            body.velocity = new Vector2(body.velocity.x, jumpPower);
-            anim.SetTrigger("jump");
+            body.gravityScale = 0;
+            body.velocity = Vector2.zero;
         }
-        else if (onWall() && isGrounded())
+        else
         {
-            if (horizontalInput == 0)
+            body.gravityScale = 7;
+            body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
+
+            if(isGrounded())
             {
-                body.velocity = new Vector2(-Mathf.Sign(transform.localScale.x) * 10, 0);
-                transform.localScale = new Vector3(-Mathf.Sign(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+                coyoteCounter = coyoteTime; // zresetuj licznik kojotów, gdy s¹ na ziemi
+                jumpCounter = extraJumps;  // zresetuj licznik dodatkowych skokow
             }
             else
-                body.velocity = new Vector2(-Mathf.Sign(transform.localScale.x) * 3, 6);
-            wallJumpCooldown = 0;
+                coyoteCounter -= Time.deltaTime; //rozpoczêcie licznika kojotów, gdy nie s¹ na ziemi
         }
+    }
+
+    private void Jump()
+    {
+        if (coyoteCounter <= 0 && !onWall() && jumpCounter <= 0) return; //jeœli licznik kojotów wynosi 0 lub mniej i nie znajduje siê na œcianie i nie ma dodatkowych skokow nie rób niczego
+
+        SoundManager.Instance.PlaySound(JumpSound);
+
+        if (isGrounded())
+            body.velocity = new Vector2(body.velocity.x, jumpPower);
+       else
+        {
+            // jeœli nie le¿y na ziemi, a licznik kojotów jest wiêkszy ni¿ 0, wykonaj normalny skok
+            if(coyoteCounter > 0)
+                body.velocity = new Vector2(body.velocity.x, jumpPower);
+            else
+            {
+                if(jumpCounter > 0) //jeœli mamy dodatkowe skoki, to skaczemy i zmniejszamy licznik skoków
+                {
+                    body.velocity = new Vector2(body.velocity.x, jumpPower);
+                    jumpCounter--;
+                }
+            }
+        }
+        //resetowanie licznika kojotów do 0 w celu unikniêcia podwójnych skoków
+        coyoteCounter = 0;
+
+
+
     }
 
     
@@ -117,6 +172,12 @@ public class Ninja : MonoBehaviour
             );
     }
 
+    private void WallJump()
+    {
+        body.AddForce(new Vector2(-Mathf.Sign(transform.localScale.x) * wallJumpX, wallJumpY));
+        wallJumpCooldown = 0;
+    }
+
 
     //skakanie po œcianie
    private bool isGrounded()
@@ -131,7 +192,7 @@ public class Ninja : MonoBehaviour
     }
     public bool canAttack()
     {
-        return horizontalInput == 0 && isGrounded() && !onWall();
+        return horizontalInput == 0 && isGrounded() && !onWall() && !healthComponent.IsDead;
     }
 }
 

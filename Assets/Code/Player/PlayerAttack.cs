@@ -5,8 +5,10 @@ using UnityEngine;
 public class PlayerAttack : MonoBehaviour
 {
     [SerializeField] private float attackCooldown;
+    [SerializeField] private AudioClip AttackSound;
     private Animator anim;
-    private Ninja playerMovement; 
+    private Ninja playerMovement;
+    private Health healthComponent;
     private float cooldownTimer = Mathf.Infinity;
 
     public Transform attackPoint;
@@ -14,11 +16,12 @@ public class PlayerAttack : MonoBehaviour
     public float attackRange = 1f;
     public int attackDamage = 10;
 
+
+
     private void Awake() //pobierz animatora i componenty kodu ninja
     {
         anim = GetComponent<Animator>();
         playerMovement = GetComponent<Ninja>();
-
     }
 
     private void Update() // atack pod przyciskiem spacji
@@ -31,6 +34,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void Attack() // atack, wykrywanie wrogów i obrazenia
     {
+
         //animacja ataku
         anim.SetTrigger("attack");
         cooldownTimer = 0;
@@ -42,7 +46,8 @@ public class PlayerAttack : MonoBehaviour
         foreach(Collider2D enemy in hitEnemies)
         {
             enemy.GetComponent<enemy>().TakeDamage(attackDamage);
-        } 
+        }
+
     }
     private void OnDrawGizmosSelected()
     {
